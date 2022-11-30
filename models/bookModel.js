@@ -3,10 +3,12 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     subtitle: {
       type: DataTypes.STRING,
       allowNull: true,
+      unique: true,
     },
     writer: {
       type: DataTypes.STRING,
@@ -17,12 +19,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     publicationDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
   });
   return Book;
