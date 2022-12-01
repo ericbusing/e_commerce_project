@@ -62,6 +62,7 @@ module.exports.updateBook = (req, res) => {
       publicationDate: req.body.publicationDate,
       description: req.body.description,
     },
+
     {
       where: { id: req.body.id },
     }
