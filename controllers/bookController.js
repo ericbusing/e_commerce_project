@@ -1,5 +1,5 @@
 const db = require("../models");
-const router = require("../routes/bookRoutes");
+const fs = require("fs");
 
 // get all books
 module.exports.readBook = (req, res) => {
@@ -19,22 +19,46 @@ module.exports.readBookByID = (req, res) => {
 };
 
 // post new book
-module.exports.postNewBook = (req, res) => {
-  db.Book.create({
-    title: req.body.title,
-    subtitle: req.body.subtitle,
-    writer: req.body.writer,
-    publishingHouse: req.body.publishingHouse,
-    publicationDate: req.body.publicationDate,
-    description: req.body.description,
-  })
-    .then(() => {
-      res.status(201).json({ message: "Book added !" });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json({ error });
-    });
+module.exports.postNewBook = async (req, res) => {
+  //   db.Book.create({
+  //     title: req.body.title,
+  //     subtitle: req.body.subtitle,
+  //     cover: req.body.cover,
+  //     writer: req.body.writer,
+  //     publishingHouse: req.body.publishingHouse,
+  //     publicationDate: req.body.publicationDate,
+  //     description: req.body.description,
+  //   })
+  //     .then(() => {
+  //       res.status(201).json({ message: "Book added !" });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       res.status(400).json({ error });
+  //     });
+  // };
+  try {
+    const book = req.body;
+    if (req.file) {
+      const bookCreated = await db.Book.create({
+        cover: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`,
+        ...book,
+      });
+      bookCreated.save();
+      res.status(201).json({ message: "Book enregistré!" });
+    } else {
+      const bookCreated = await db.Book.create({
+        ...book,
+      });
+      bookCreated.save();
+      res.status(201).json({ message: "Book enregistré!" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error });
+  }
 };
 
 // delete book
@@ -62,7 +86,6 @@ module.exports.updateBook = (req, res) => {
       publicationDate: req.body.publicationDate,
       description: req.body.description,
     },
-
     {
       where: { id: req.body.id },
     }

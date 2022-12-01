@@ -10,6 +10,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       unique: true,
     },
+    cover: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      unique: true,
+    },
     writer: {
       type: DataTypes.STRING,
       allowNull: false,
