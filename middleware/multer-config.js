@@ -17,13 +17,10 @@ const storage = multer.diskStorage({
   },
   // La fonction filename est pour utiliser le nom d'origine.
   filename: (req, file, callback) => {
-    // Remplacement des espaces par des underscores.
-    const name = file.originalname.split(" ").join("_");
     // Ajout de l'extension.
     const extension = MIME_TYPES[file.mimetype];
-    // Utilisation d'un timestamp pour donner la date a laquelle
-    // le fichier a ete enregistrer dans le nom de celui-ci.
-    callback(null, name + Date.now() + "." + extension);
+    // Utilisation d'un timestamp pour donner la date a laquelle le fichier a ete enregistrer dans le nom de celui-ci.
+    callback(null, Date.now() + "." + extension);
   },
 });
 // Exportation du module.

@@ -8,7 +8,7 @@ module.exports.readBook = (req, res) => {
 
 // get book by id
 module.exports.readBookByID = (req, res) => {
-  db.Book.findAll({
+  db.Book.findOne({
     where: { id: req.params.id },
   })
     .then((book) => res.send(book))
@@ -20,23 +20,6 @@ module.exports.readBookByID = (req, res) => {
 
 // post new book
 module.exports.postNewBook = async (req, res) => {
-  //   db.Book.create({
-  //     title: req.body.title,
-  //     subtitle: req.body.subtitle,
-  //     cover: req.body.cover,
-  //     writer: req.body.writer,
-  //     publishingHouse: req.body.publishingHouse,
-  //     publicationDate: req.body.publicationDate,
-  //     description: req.body.description,
-  //   })
-  //     .then(() => {
-  //       res.status(201).json({ message: "Book added !" });
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //       res.status(400).json({ error });
-  //     });
-  // };
   try {
     const book = req.body;
     if (req.file) {
@@ -76,25 +59,33 @@ module.exports.deleteBook = (req, res) => {
 };
 
 // update a book
-module.exports.updateBook = (req, res) => {
-  db.Book.update(
-    {
-      title: req.body.title,
-      subtitle: req.body.subtitle,
-      writer: req.body.writer,
-      publishingHouse: req.body.publishingHouse,
-      publicationDate: req.body.publicationDate,
-      description: req.body.description,
-    },
-    {
-      where: { id: req.body.id },
-    }
-  )
-    .then(() => {
-      res.status(200).json({ message: "Book has been update!" });
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(400).json({ error });
+module.exports.updateBook = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const bookToUpdate = await db.Book.findOne({
+      where: { id },
     });
+
+    const newBook = req.body;
+    fileName = bookToUpdate.cover?.split("/images/")[1];
+
+    fs.unlink(`images/${fileName}`, async () => {
+      await db.Book.update(
+        {
+          cover: req.file
+            ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
+            : bookToUpdate.cover,
+          ...newBook,
+        },
+        { where: { id } }
+      );
+    });
+
+    res.status(200).json({ message: "Book has been update !" });
+    return console.log(newBook);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error });
+  }
 };
