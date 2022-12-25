@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Cart from "./Cart.js";
-import Home from "./Home.js";
-import Profil from "./Profil.js";
+import Cart from "./pages/Cart";
+import Home from "./pages/Home.js";
+import Profil from "./pages/Profil.js";
 
 function App() {
   return (

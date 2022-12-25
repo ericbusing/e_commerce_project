@@ -5,7 +5,6 @@ import "../styles/styles.scss";
 const Navbar = () => {
   return (
     <div className="navbar">
-      <h1>Maison d'édition</h1>
       <ul className="nav-menu">
         <NavLink to="/profil" style={{ textDecoration: "none" }}>
           <li className="nav-list">Profil</li>
@@ -17,6 +16,10 @@ const Navbar = () => {
           <li className="nav-list">Déconnection</li>
         </NavLink>
       </ul>
+      <h1>Maison d'édition</h1>
+      <div className="newsletter">
+        <h6>Newsletter</h6>
+      </div>      
     </div>
   );
 };
