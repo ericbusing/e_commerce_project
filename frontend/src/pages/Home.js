@@ -30,17 +30,16 @@ const Home = () => {
     <div>
       <Navbar />
       {/*affichage des livres*/}
-      {books.length}
       {books.map((book =>
-        <tr key={book.id}>
-          <td>{book.title}</td>
-          <td>{book.subtitle}</td>
-          <td>{book.cover}</td>
-          <td>{book.writer}</td>
-          <td>{book.publishingHouse}</td>
-          <td>{book.publicationDate}</td>
-          <td>{book.description}</td>
-        </tr>
+        <div key={book.id}>
+          <h2>{book.title}</h2>
+          <h3>{book.subtitle}</h3>
+          <img src={book.cover} alt="Couverture du livre" />
+          <h2>{book.writer}</h2>
+          <p>{book.publishingHouse}</p>
+          <p>{book.publicationDate}</p>
+          <p>{book.description}</p>
+        </div>
         // <Focus
         // key={i}
         // book={book}
